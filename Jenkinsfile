@@ -18,6 +18,14 @@ pipeline {
         MALLOC_CHECK_   =   1
         ISISROOT        =   "${env.WORKSPACE}/build"
         KAKADU_HEADERS  =   '/astro_efs/kakadu_7_9'
+        BUILD_ARTIFACT_FILEPATH = ''
+        ANACONDA_API_TOKEN = ''
+        // Reduce code duplication?
+        // ACTIVATE_CONDA_ENV = sh (
+        //     script: '. /home/conda/mambaforge3/etc/profile.d/conda.sh > /dev/null ;
+        //             conda activate isis > /dev/null',
+        //     returnStdout: true
+        // )
     }
     
     stages {
@@ -118,6 +126,39 @@ pipeline {
                     pytest .
 
                     '''
+                }
+            }
+        }
+        stage('Build for Anaconda Cloud') {
+            steps {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    script {
+                        . /home/conda/mambaforge3/etc/profile.d/conda.sh > /dev/null
+                        conda activate isis > /dev/null
+                        conda install anaconda-client
+                        conda install -c anaconda conda-build
+                        conda install -c anaconda conda-verify
+                        ./buildCondaRelease.sh
+                        BUILD_ARTIFACT_FILEPATH = conda build recipe/ --output
+                    }
+                }
+            }
+        }
+        stage('Upload Build to Anaconda Cloud') {
+            steps {
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    script {
+                        export ANACONDA_API_TOKEN=${ANACONDA_API_TOKEN}
+                        BUILD_ARTIFACT_FILEPATH = conda build recipe/ --output
+                        if (env.GIT_BRANCH.contains('RC')) {
+                            // Release candidate
+                            anaconda upload -u usgs-astrogeology -l RC ${BUILD_ARTIFACT_FILEPATH}
+                        } else {
+                            // Standard release
+                            anaconda upload -u usgs-astrogeology ${BUILD_ARTIFACT_FILEPATH}
+                        }
+                    }
+                    // # Custom build, specify custom label?
                 }
             }
         }
