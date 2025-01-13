@@ -64,6 +64,7 @@ def search_for_linked_issues(pull_body: str) -> list:
     # Split the PR body by heading 
     pull_body_list = pull_body.split('##')
     regex_pattern = rf'{ISSUES_URL}(\d)|(#[^\D]\d*)'
+    issue_numbers = []
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
@@ -75,10 +76,10 @@ def search_for_linked_issues(pull_body: str) -> list:
             filtered_list = list(filter(None, flattened_list))
             # Remove '#' from items
             issue_numbers = list(map(lambda item: item.replace('#', ''), filtered_list))
-            return issue_numbers
-    # No linked issues
-    print(False)
-    sys.exit(0)
+    return issue_numbers
+    # No linked issues, return issue_numbers
+    # print(False)
+    # sys.exit(0)
 
 
 def get_linked_issues(issue_numbers: list) -> list:
@@ -113,10 +114,10 @@ def get_issue_labels(response_list: list) -> list:
             if label_name not in combined_issue_labels:
                 # Add label if it does not exist
                 combined_issue_labels.append(label_name)
-    if not combined_issue_labels:
-        # No labels to return
-        print(False)
-        sys.exit(0)
+    # if not combined_issue_labels:
+    #     # No labels to return
+    #     print(False)
+    #     sys.exit(0)
     return combined_issue_labels
 
 def update_pr_labels(pull_number: str, combined_issue_labels: list):
@@ -163,9 +164,11 @@ if __name__ == "__main__":
         response = get_prs_associated_with_commit()
         pull_number, pull_body = get_pr_attributes(response)
         issue_numbers = search_for_linked_issues(pull_body)
-        response_list = get_linked_issues(issue_numbers)
-        combined_issue_labels = get_issue_labels(response_list)
-        update_pr_labels(pull_number, combined_issue_labels)
+        if len(issue_numbers):
+            response_list = get_linked_issues(issue_numbers)
+            combined_issue_labels = get_issue_labels(response_list)
+            if len(combined_issue_labels):
+                update_pr_labels(pull_number, combined_issue_labels)
 
         # Check if PR is a bugfix
         response = get_pr(pull_number)
