@@ -42,9 +42,9 @@ def get_pr_attributes(response: Response) -> tuple:
     Get necessary PR attributes.
     """
     pull_response_json = response.json()
-    if len(pull_response_json) == 0:
+    if not len(pull_response_json):
         # No PRs attributed to the commit
-        print(False + "HELLO")
+        print(False + "HELLO, response: " + str(pull_response_json))
         sys.exit(0)
     pull_number = pull_response_json[0].get("number")
     pull_body = pull_response_json[0].get("body")
