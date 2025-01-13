@@ -4,10 +4,10 @@ env:
   PR_NUMBER: ${{ github.event.number }}
   GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
-on:
-  pull_request_target:
-    branches: 
-      - '**'
+# on:
+#   pull_request_target:
+#     branches: 
+#       - '**'
 
 jobs:
   build:
