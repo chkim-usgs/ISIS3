@@ -43,7 +43,7 @@ def get_pr_attributes(response: Response) -> tuple:
     """
     pull_response_json = response.json()
     print(str(pull_response_json))
-    if not len(pull_response_json):
+    if not pull_response_json:
         # No PRs attributed to the commit
         print(False + 1)
         sys.exit(0)
@@ -64,11 +64,13 @@ def search_for_linked_issues(pull_body: str) -> list:
     """
     # Split the PR body by heading 
     pull_body_list = pull_body.split('##')
+    print("pull_body_list=" + str(pull_body_list))
     regex_pattern = rf'{ISSUES_URL}(\d)|(#[^\D]\d*)'
     issue_numbers = []
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
+            print("section=" + section)
             # Find items that match the regex pattern
             matched_items = rgx.findall(regex_pattern, section)
             print("matched_items=" + str(matched_items))
@@ -170,10 +172,10 @@ if __name__ == "__main__":
         response = get_prs_associated_with_commit()
         pull_number, pull_body = get_pr_attributes(response)
         issue_numbers = search_for_linked_issues(pull_body)
-        if len(issue_numbers):
+        if issue_numbers:
             response_list = get_linked_issues(issue_numbers)
             combined_issue_labels = get_issue_labels(response_list)
-            if len(combined_issue_labels):
+            if combined_issue_labels:
                 update_pr_labels(pull_number, combined_issue_labels)
 
         # Check if PR is a bugfix
