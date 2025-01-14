@@ -60,7 +60,6 @@ jobs:
       run: |
         major_minor=$(echo ${{steps.get_latest_tag.outputs.tag}} | cut -d '.' -f 1,2)
         echo "::set-output name=major_minor::$major_minor"
-        git config --global --add safe.directory /github/workspace
     - name: Create PR to branch
       uses: adamtharani/github-action-cherry-pick@master
       # PR to the latest feature release.  Merges are enabled
@@ -69,4 +68,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DRY_RUN: false
+      run: git config --global --add safe.directory /github/workspace
 
