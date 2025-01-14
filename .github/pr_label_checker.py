@@ -144,7 +144,7 @@ def get_pr(pull_number: str) -> Response:
     """
     try:
         response = get(f'{API_PULLS_URL}/{pull_number}', headers=HEADERS)
-        print("get_pr response = " + response.json())
+        print("get_pr response = " + str(response.json()))
         response.raise_for_status()
         return response
     except HTTPError as he:
