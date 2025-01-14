@@ -66,6 +66,7 @@ def search_for_linked_issues(pull_body: str) -> list:
     pull_body_list = pull_body.split('##')
     print("pull_body_list=" + str(pull_body_list))
     regex_pattern = rf'{ISSUES_URL}(\d)|(#[^\D]\d*)'
+    print("issues_url=" + str(ISSUES_URL))
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
