@@ -71,13 +71,15 @@ def search_for_linked_issues(pull_body: str) -> list:
         if section != None and 'Related Issue' in section:
             # Find items that match the regex pattern
             matched_items = rgx.findall(regex_pattern, section)
+            print("matched_items=" + str(matched_items))
             # Convert list of tuples to list of all items
             flattened_list = list(chain.from_iterable(matched_items))
             # Remove items of empty values
             filtered_list = list(filter(None, flattened_list))
             # Remove '#' from items
             issue_numbers = list(map(lambda item: item.replace('#', ''), filtered_list))
-    print("issue_numbers=" + str(issue_numbers))
+            print("issue_numbers1=" + str(issue_numbers))
+    print("issue_numbers2=" + str(issue_numbers))
     return issue_numbers
     # No linked issues, return issue_numbers
     # print(False)
