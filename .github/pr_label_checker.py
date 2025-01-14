@@ -70,7 +70,7 @@ def search_for_linked_issues(pull_body: str) -> list:
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
-            print("section=" + section)
+            # print("section=" + section)
             # Find items that match the regex pattern
             matched_items = rgx.findall(regex_pattern, section)
             print("matched_items=" + str(matched_items))
