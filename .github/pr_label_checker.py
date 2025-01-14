@@ -45,7 +45,7 @@ def get_pr_attributes(response: Response) -> tuple:
     # print(str(pull_response_json))
     if not len(pull_response_json):
         # No PRs attributed to the commit
-        print(False)
+        print(False + 1)
         sys.exit(0)
     pull_number = pull_response_json[0].get("number")
     pull_body = pull_response_json[0].get("body")
@@ -157,7 +157,7 @@ def is_pr_bugfix(response: Response) -> bool:
     for label in labels:
         if label.get("name") == "bug":
             return True
-    return False
+    return False + 2
 
 if __name__ == "__main__":
     try:
