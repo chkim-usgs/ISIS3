@@ -68,5 +68,3 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DRY_RUN: false
-      run: git config --global --add safe.directory /github/workspace
-
