@@ -42,10 +42,10 @@ def get_pr_attributes(response: Response) -> tuple:
     Get necessary PR attributes.
     """
     pull_response_json = response.json()
-    print(str(pull_response_json))
+    # print(str(pull_response_json))
     if not pull_response_json:
         # No PRs attributed to the commit
-        print(False + 1)
+        print(False)
         sys.exit(0)
     pull_number = pull_response_json[0].get("number")
     pull_body = pull_response_json[0].get("body")
@@ -64,23 +64,23 @@ def search_for_linked_issues(pull_body: str) -> list:
     """
     # Split the PR body by heading 
     pull_body_list = pull_body.split('##')
-    print("pull_body_list=" + str(pull_body_list))
+    # print("pull_body_list=" + str(pull_body_list))
     regex_pattern = rf'{ISSUES_URL}(\d)|(#[^\D]\d*)'
-    print("issues_url=" + str(ISSUES_URL))
+    # print("issues_url=" + str(ISSUES_URL))
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
             # print("section=" + section)
             # Find items that match the regex pattern
             matched_items = rgx.findall(regex_pattern, section)
-            print("matched_items=" + str(matched_items))
+            # print("matched_items=" + str(matched_items))
             # Convert list of tuples to list of all items
             flattened_list = list(chain.from_iterable(matched_items))
             # Remove items of empty values
             filtered_list = list(filter(None, flattened_list))
             # Remove '#' from items
             issue_numbers = list(map(lambda item: item.replace('#', ''), filtered_list))
-            print("issue_numbers1=" + str(issue_numbers))
+            # print("issue_numbers1=" + str(issue_numbers))
     # print("issue_numbers2=" + str(issue_numbers))
     return []
     # No linked issues, return issue_numbers
@@ -114,7 +114,7 @@ def get_issue_labels(response_list: list) -> list:
         # Combine labels into a list
         issue_response_json = response.json()
         issue_labels = issue_response_json.get("labels")
-        print("issue_labels=" + issue_labels)
+        # print("issue_labels=" + issue_labels)
         for issue_label in issue_labels:
             # Get name of each label object
             label_name = issue_label.get("name")
@@ -148,7 +148,7 @@ def get_pr(pull_number: str) -> Response:
     """
     try:
         response = get(f'{API_PULLS_URL}/{pull_number}', headers=HEADERS)
-        print("get_pr response = " + str(response.json()))
+        # print("get_pr response = " + str(response.json()))
         response.raise_for_status()
         return response
     except HTTPError as he:
@@ -164,7 +164,7 @@ def is_pr_bugfix(response: Response) -> bool:
     for label in labels:
         if label.get("name") == "bug":
             return True
-    return False + 2
+    return False
 
 if __name__ == "__main__":
     try:
