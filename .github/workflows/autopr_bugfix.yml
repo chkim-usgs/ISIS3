@@ -54,7 +54,7 @@ jobs:
         fetch-depth: 0
     - name: 'Get Previous tag'
       id: get_latest_tag
-      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      uses: "WyriHaximus/github-action-get-previous-tag@v1.4.0"
     - id: get_short_version
       # Get the major / minor version without patch info i.e. 6.0 from 6.0.1
       run: |
