@@ -67,6 +67,7 @@ def search_for_linked_issues(pull_body: str) -> list:
     # print("pull_body_list=" + str(pull_body_list))
     regex_pattern = rf'{ISSUES_URL}(\d)|(#[^\D]\d*)'
     # print("issues_url=" + str(ISSUES_URL))
+    issue_numbers = []
     for section in pull_body_list:
         # Find section with heading 'Related Issue'
         if section != None and 'Related Issue' in section:
@@ -82,7 +83,7 @@ def search_for_linked_issues(pull_body: str) -> list:
             issue_numbers = list(map(lambda item: item.replace('#', ''), filtered_list))
             # print("issue_numbers1=" + str(issue_numbers))
     # print("issue_numbers2=" + str(issue_numbers))
-    return []
+    return issue_numbers
     # No linked issues, return issue_numbers
     # print(False)
     # sys.exit(0)
