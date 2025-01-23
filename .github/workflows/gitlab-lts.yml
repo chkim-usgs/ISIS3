@@ -60,7 +60,12 @@ jobs:
           git clone https://isis-codebuild-ci:$GITLAB_TOKEN@code.usgs.gov/astrogeology/isis-codebuild-ci.git
           echo $LTS_VERSION
           cd isis-codebuild-ci
-          git checkout -b $LTS_VERSION
+          if [[ "git ls-remote --exit-code origin $LTS_VERSION" == 2 ]]; then
+            git checkout -b $LTS_VERSION
+          else
+            git checkout $LTS_VERSION
+            git reset --hard origin/main
+          fi
           echo -e "\nenv: \n  shell: bash \n  variables: \n    LTS_VERSION: $LTS_VERSION \n    BASE_LTS: $BASE_LTS \n    ANACONDA_API_TOKEN: $ANACONDA_TOKEN \n    GITHUB_SHA: $GITHUB_SHA" >> buildspec-lts.yml
           git commit -a -m "$LTS_VERSION"
           git push origin $LTS_VERSION --force
