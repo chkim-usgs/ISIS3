@@ -39,10 +39,12 @@ release.
 - [TEST] Added changes for LTS workflow 
 
 ### Changed
+- [TEST2] Changed for LTS workflow
 
 ### Fixed
 - Fixed kaguyatc2isis invalid BandBin values [#5629](https://github.com/DOI-USGS/ISIS3/issues/5629)
 - Fixed SpiceClient to handle redirect requests.
+- [TEST2] Second test for LTS workflow
 - Fixed jigsaw to default OUTADJUSTMENTH5 option to false and allow this feature to run on read-only images [#5700](https://github.com/DOI-USGS/ISIS3/issues/5700)
 - Fixed Cube::fromIsd to add "LineScanTimes" table from HRSC isds [#5668](https://github.com/DOI-USGS/ISIS3/issues/5668)
 - [TEST] Fixed changes for LTS workflow
