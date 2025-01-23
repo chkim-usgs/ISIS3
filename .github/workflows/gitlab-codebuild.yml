@@ -9,6 +9,11 @@ env:
 #     branches: 
 #       - '**'
 
+on:
+  push:
+    branches:
+      - update_pr_workflow
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,10 +26,10 @@ jobs:
           git config --global user.email "project_14468_bot_3f7d8e1a392afd88ead5f3f3154e809d@noreply.gitlab.com"
           git clone https://isis-codebuild-ci:$GITLAB_TOKEN@code.usgs.gov/astrogeology/isis-codebuild-ci.git
           cd isis-codebuild-ci
-          git checkout -b PR_$PR_NUMBER
+          git checkout -b ck-lts-testing
           echo -e "\nenv: \n  shell: bash \n  variables: \n    PR_NUMBER: $PR_NUMBER \n    MERGE_BRANCH: $GITHUB_BASE_REF" >> buildspec.yml
-          git commit -a -m "$PR_NUMBER"
-          git push origin PR_$PR_NUMBER --force
+          git commit -a -m "ck-lts-testing"
+          git push origin ck-lts-testing --force
           
   comment-bot:
       permissions: write-all
